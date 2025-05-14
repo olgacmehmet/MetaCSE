@@ -1,0 +1,12 @@
+*.DS_Store
+LOGO.*
+.idea/
+dist/
+build/
+todo.md
+MetaCSE.dmgcanvas
+.eggs/
+__pycache__
+sqlite
+config.json
+.vscode/
