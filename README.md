@@ -2,7 +2,7 @@
 <p align="center">
   <img src="https://img.shields.io/github/stars/Polylanger/MetaCSE?style=for-the-badge&logo=starship&color=gold">
   <img src="https://img.shields.io/github/release/Polylanger/MetaCSE?style=for-the-badge&logo=azurepipelines">
-  <img src="https://img.shields.io/badge/Python-3.8%2B-3776AB?style=for-the-badge&logo=python">
+  <img src="https://img.shields.io/badge/Python-3.12%2B-3776AB?style=for-the-badge&logo=python">
 </p>
 
 <p align="center">
