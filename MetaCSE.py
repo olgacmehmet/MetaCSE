@@ -41,7 +41,7 @@ class Application(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
         self.master = master
-        self.delete_access_token()
+        # self.delete_access_token()
         self.createWidget()
         self.language = self.dic['language']
         self.setLanguage()
@@ -611,12 +611,12 @@ https://hunter.qianxin.com/"""
         for item in tree.get_children():
             tree.delete(item)
 
-    def delete_access_token(self):
-        try:
-            system(f"rm zoomeye_access_token.txt")
-        except Exception as e:
-            messagebox.showerror('Error', e)
-            return None
+    # def delete_access_token(self):
+    #     try:
+    #         system(f"rm zoomeye_access_token.txt")
+    #     except Exception as e:
+    #         messagebox.showerror('Error', e)
+    #         return None
 
     def log_insert(self, str):  # update log
         self.LOG.insert(tk.END, chars=str)
@@ -655,7 +655,7 @@ https://hunter.qianxin.com/"""
             'password': password
         }
         encoded_data = json.dumps(data)
-        resp_json = requests.post(url=url, data=encoded_data).json()
+        resp_json = requests.post(url=url, data=encoded_data, timeout=100).json()
         # print(resp_json)
         try:
             access_token = resp_json['access_token']
