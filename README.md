@@ -14,7 +14,7 @@
 ## 🌟 核心特性
 
 ### 🚀 多源异构数据聚合
-- **统一接入层**：集成5大主流网络空间搜索引擎API（[支持列表](Intro/Statistics.md)）
+- **统一接入层**：集成5大主流网络空间搜索引擎API（[支持列表](doc/Statistics.md)）
 - **智能语法转换**：自动将标准搜索语法（如`port:80`）适配各引擎特有语法规则
 - **并行查询加速**：采用异步I/O模型实现多引擎并发请求，响应速度提升300%
 
@@ -73,11 +73,11 @@ python MetaCSE.py
 
 | 搜索中心 | 配置管理 |
 |----------|----------|
-| <img src="pic/fofa.png" width="400"> | <img src="pic/config.jpg" width="400"> |
+| <img src="doc/img/search.png" width="400"> | <img src="doc/img/config.png" width="400"> |
 
-| 数据存储 | 用户面板 |
+| 数据导出 | 用户面板 |
 |----------|----------|
-| <img src="pic/mysql.png" width="400"> | <img src="pic/csv.png" width="400"> |
+| <img src="doc/img/export.png" width="400"> | <img src="doc/img/info.png" width="400"> |
 
 ---
 
