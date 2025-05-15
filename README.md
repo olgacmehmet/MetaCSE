@@ -42,6 +42,7 @@
 - 至少一个有效的网络空间搜索引擎API凭证
 
 ### 安装步骤
+
 ```bash
 克隆仓库
 git clone https://github.com/Polylanger/MetaCSE.git
@@ -58,9 +59,11 @@ python MetaCSE.py
 ## ⚙ 配置中心
 
 ### 配置文件路径
+
 `./config.json`
 
 ### 字段说明
+
 | 配置项                | 数据类型 | 必填 | 描述                          |
 |-----------------------|----------|------|-------------------------------|
 | `language`            | string   | 否   | 界面语言 (ch/en)              |
