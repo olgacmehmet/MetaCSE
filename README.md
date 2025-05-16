@@ -57,13 +57,13 @@ python MetaCSE.py
 
 ### 字段说明
 | 配置项                | 数据类型 | 必填 | 描述                          |
-|-----------------------|----------|------|-------------------------------|
-| `language`            | string   | 否   | 界面语言 (ch/en)              |
-| `zoomeye_api`         | string   | 否   | ZoomEye API Key               |
-| `fofa_username`       | string   | 否   | FOFA 注册邮箱                 |
-| `quake_api`           | string   | 是   | 360Quake API Key              |
-| `database.host`       | string   | 否   | MySQL服务器地址               |
-| `database.port`       | int      | 否   | 数据库端口 (默认3306)         |
+|-----------------------|----------|------|-----------------------------|
+| `language`            | string   | 否   | 界面语言 (ch/en)             |
+| `zoomeye_api`         | string   | 否   | ZoomEye API Key             |
+| `fofa_username`       | string   | 否   | FOFA 注册邮箱                |
+| `quake_api`           | string   | 是   | 360Quake API Key            |
+| `database.host`       | string   | 否   | MySQL服务器地址              |
+| `database.port`       | int      | 否   | 数据库端口 (默认3306)        |
 
 > 💡 配置提示：通过GUI界面修改配置后，务必点击`保存配置`按钮使设置生效
 
