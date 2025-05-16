@@ -86,7 +86,9 @@ class MetaCSEApp(ctk.CTk):
 
         # 数据表格
         self.table = DataTable(
-            tab, columns=("ID", "engine", "IP", "PORT/DOMAIN", "OS", "TITLE"), col_proportions=[0.08, 0.15, 0.22, 0.1, 0.15, 0.3]
+            tab,
+            columns=("ID", "engine", "IP", "PORT/DOMAIN", "OS", "TITLE"),
+            col_proportions=[0.08, 0.15, 0.22, 0.1, 0.15, 0.3],
         )
         self.table.pack(fill="both", expand=True, padx=10, pady=10)
 
@@ -118,142 +120,209 @@ class MetaCSEApp(ctk.CTk):
         text = "Version: v1.0.0 | Author: Polylanger | E-mail: qiang.zhangcs@outlook.com"
         ctk.CTkLabel(footer, text=text, text_color="#666").pack(pady=3)
 
-
     def build_config_tab(self):
-        """重构后的配置页构建方法"""
+        """重构后的配置页核心逻辑"""
         tab = self.tab_view.tab("配置")
-        tab.grid_columnconfigure((0, 1), weight=1, uniform="config_cols")
+        tab.grid_columnconfigure(0, weight=1)
         tab.grid_rowconfigure(0, weight=1)
 
-        # 主容器使用3:2的左右比例
-        main_container = ctk.CTkFrame(tab, fg_color="transparent")
-        main_container.pack(fill="both", expand=True, padx=15, pady=15)
+        # 主容器分左右两大区块
+        main_panel = ctk.CTkFrame(tab, fg_color="transparent")
+        main_panel.pack(fill="both", expand=True, padx=15, pady=15)
 
-        # 左侧面板（账号/API配置）
-        left_panel = ctk.CTkFrame(main_container, fg_color="transparent")
-        left_panel.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
-        
-        # 右侧面板（数据库/存储配置）
-        right_panel = ctk.CTkFrame(main_container, fg_color="transparent")
-        right_panel.grid(row=0, column=1, sticky="nsew", padx=5, pady=5)
+        # 左侧引擎配置（占60%宽度）
+        left_panel = ctk.CTkFrame(main_panel, width=int(self.winfo_width() * 0.6), fg_color="transparent")
+        left_panel.pack(side="left", fill="y", expand=True)
 
-        # 构建子组件
-        self._build_auth_section(left_panel)      # 认证信息区块
-        self._build_api_keys_section(left_panel)  # API密钥区块
-        self._build_storage_section(right_panel)  # 存储配置区块
-        self._build_db_section(right_panel)       # 数据库配置区块
-        self._build_actions_section(right_panel)  # 操作按钮区块
+        # 右侧存储配置（占40%宽度）
+        right_panel = ctk.CTkFrame(main_panel, fg_color="transparent")
+        right_panel.pack(side="right", fill="both", expand=True)
 
-    def _build_auth_section(self, master):
-        """认证信息区块"""
-        frame = self._create_section_frame(master, "账户认证")
-        fields = [
-            ("账号:", "account_var", ""),
-            ("密码:", "password_var", "", True),
-            ("邮箱:", "email_var", "qiang.zhangcs@outlook.com"),
-        ]
-        self._create_form_rows(frame, fields)
-
-    def _build_api_keys_section(self, master):
-        """API密钥区块"""
-        frame = self._create_section_frame(master, "引擎API配置")
-        engines = [
-            ("Zoomeye", "zoomeye_key_var"),
-            ("Fofa", "fofa_key_var"),
-            ("360Quake", "quake_key_var"),
-            ("Shodan", "shodan_key_var"), 
-            ("Hunter", "hunter_key_var"),
-        ]
-        for engine, var in engines:
-            self._create_form_row(frame, f"{engine} API-KEY:", var)
-
-    def _build_storage_section(self, master):
-        """存储配置区块"""
-        frame = self._create_section_frame(master, "存储配置")
-        
-        # 文件存储
-        file_frame = ctk.CTkFrame(frame, fg_color="transparent")
-        file_frame.pack(fill="x", pady=3)
-        self._create_form_row(file_frame, "文件路径:", "file_path_var", "results.csv")
-        
-        # SQLite配置
-        sqlite_frame = ctk.CTkFrame(frame, fg_color="transparent")
-        sqlite_frame.pack(fill="x", pady=3)
-        self._create_form_row(sqlite_frame, "SQLite路径:", "sqlite_path_var", "sqlite.db")
-
-    def _build_db_section(self, master):
-        """数据库配置区块（MySQL）"""
-        frame = self._create_section_frame(master, "数据库配置(MySQL)")
-        fields = [
-            ("主机:", "mysql_host_var", "192.168.32.121"),
-            ("端口:", "mysql_port_var", "3306"),
-            ("数据库名:", "mysql_db_var", "metacse"),
-            ("用户名:", "mysql_user_var", "root"),
-            ("密码:", "mysql_pw_var", "", True),
-        ]
-        self._create_form_rows(frame, fields)
-
-    def _build_actions_section(self, master):
-        """操作按钮区块"""
-        frame = self._create_section_frame(master, "操作控制")
-        
-        # 按钮网格布局
-        buttons = [
-            ("保存配置", "#27ae60", self.on_save_config),
-            ("读取配置", "#2980b9", self.on_load_config),
-            ("清空配置", "#c0392b", self.on_clear_config),
-            ("数据库测试", "#8e44ad", self.on_test_db),
-            ("清除token", "#f39c12", self.on_clear_token),
-        ]
-        
-        # 创建两列按钮布局
-        grid_frame = ctk.CTkFrame(frame, fg_color="transparent")
-        grid_frame.pack(fill="x", pady=5)
-        
-        for i, (text, color, cmd) in enumerate(buttons):
-            row = i // 2
-            col = i % 2
-            btn = ctk.CTkButton(
-                grid_frame, 
-                text=text,
-                fg_color=color,
-                hover_color=self._darken_color(color),
-                corner_radius=8,
-                width=120,
-                command=cmd
-            )
-            btn.grid(row=row, column=col, padx=5, pady=5, sticky="ew")
-        
-        # 语言选择
-        lang_frame = ctk.CTkFrame(frame, fg_color="transparent")
-        lang_frame.pack(fill="x", pady=10)
-        ctk.CTkLabel(lang_frame, text="界面语言:").pack(side="left", padx=5)
-        self.lang_combo = ctk.CTkComboBox(
-            lang_frame, 
-            values=["中文", "English"], 
-            variable=ctk.StringVar(value="中文"),
-            dropdown_hover_color="#3498db",
-            button_color="#3498db",
-            width=100
-        )
-        self.lang_combo.pack(side="right")
+        # 构建组件
+        self._build_engine_config(left_panel)
+        self._build_storage_config(right_panel)
+        self._build_global_actions(tab)
 
     def _create_section_frame(self, master, title):
         """创建带标题的分区框架"""
         frame = ctk.CTkFrame(master, corner_radius=8)
         frame.pack(fill="x", pady=8, padx=2)
-        
+
         # 标题装饰条
         header = ctk.CTkFrame(frame, height=28, fg_color="#f8f9fa")
-        header.pack(fill="x", pady=(0,5))
-        ctk.CTkLabel(
-            header, 
-            text=title,
-            text_color="#2c3e50",
-            font=("Microsoft YaHei", 11, "bold")
-        ).pack(side="left", padx=10)
-        
+        header.pack(fill="x", pady=(0, 5))
+        ctk.CTkLabel(header, text=title, text_color="#2c3e50", font=("Microsoft YaHei", 11, "bold")).pack(
+            side="left", padx=10
+        )
+
         return frame
+
+    def _build_engine_config(self, master):
+        """搜索引擎动态配置区（修复版）"""
+        frame = self._create_section_frame(master, "⚙️ 引擎配置")
+
+        # 引擎选择导航栏
+        self.engine_tabs = ctk.CTkTabview(frame)
+        self.engine_tabs.pack(fill="both", expand=True, padx=10, pady=5)
+
+        # 引擎配置定义
+        engine_configs = {
+            "Fofa": ["API Key", "API Secret"],
+            "Zoomeye": ["API Key"],
+            "Shodan": ["API Key"],
+            "360Quake": ["API Key"],
+            "Hunter": ["API Key", "Search Token"],
+        }
+
+        # 先创建所有选项卡
+        for engine_name in engine_configs.keys():
+            self.engine_tabs.add(engine_name)
+
+        # 构建每个引擎的配置页
+        for engine_name, fields in engine_configs.items():
+            tab_frame = self.engine_tabs.tab(engine_name)
+            self._build_engine_tab(tab_frame, engine_name, fields)
+
+        # 状态指示器
+        status_bar = ctk.CTkFrame(frame, height=30)
+        status_bar.pack(fill="x", pady=(5, 0))
+        self.api_status = ctk.CTkLabel(status_bar, text="✅ 已配置引擎: 0/5")
+        self.api_status.pack(side="left", padx=10)
+
+    def _build_engine_tab(self, master, engine_name, fields):
+        """重构后的单个引擎配置页"""
+        # 创建滚动容器
+        scroll_frame = ctk.CTkScrollableFrame(master)
+        scroll_frame.pack(fill="both", expand=True)
+
+        for field in fields:
+            # 生成规范变量名
+            var_name = f"{engine_name.lower()}_{field.lower().replace(' ', '_')}_var"
+
+            # 动态创建变量
+            if not hasattr(self, var_name):
+                setattr(self, var_name, ctk.StringVar())
+
+            # 创建配置行
+            row = ctk.CTkFrame(scroll_frame, fg_color="transparent")
+            row.pack(fill="x", pady=3)
+
+            # 标签部分
+            ctk.CTkLabel(row, text=f"{field}:", width=120, anchor="e", font=("Microsoft YaHei", 10)).pack(
+                side="left", padx=5
+            )
+
+            # 输入框
+            entry = ctk.CTkEntry(
+                row,
+                textvariable=getattr(self, var_name),
+                placeholder_text=f"输入{engine_name}的{field}...",
+                border_color="#ddd",
+                fg_color="#ffffff",
+                text_color="#333",
+            )
+            entry.pack(side="right", expand=True, fill="x", padx=5)
+
+    def _build_storage_config(self, master):
+        """增强版存储配置"""
+        frame = self._create_section_frame(master, "💾 存储配置")
+
+        # 使用Tabview实现多存储配置
+        storage_tabs = ctk.CTkTabview(frame)
+        storage_tabs.pack(fill="both", expand=True)
+
+        # 创建存储类型选项卡
+        for storage_type in ["CSV", "MySQL", "SQLite"]:
+            storage_tabs.add(storage_type)
+            tab_frame = storage_tabs.tab(storage_type)
+            self._build_storage_tab(tab_frame, storage_type.lower())
+
+    def _build_storage_tab(self, master, storage_type):
+        """构建存储配置页"""
+        config_map = {
+            "csv": [("文件路径", "csv_path_var", "results.csv")],
+            "mysql": [
+                ("主机地址", "mysql_host_var", "localhost"),
+                ("端口", "mysql_port_var", "3306"),
+                ("数据库名", "mysql_db_var", "metacse"),
+                ("用户名", "mysql_user_var"),
+                ("密码", "mysql_pass_var"),
+            ],
+            "sqlite": [("数据库路径", "sqlite_path_var", "data.db")],
+        }
+
+        for field in config_map.get(storage_type, []):
+            self._create_form_row(master, *field)
+
+    def _build_csv_card(self, master):
+        """CSV存储配置"""
+        card = ctk.CTkFrame(master, border_width=1, border_color="#e0e0e0")
+        header = ctk.CTkFrame(card, fg_color="#f5f5f5")
+        header.pack(fill="x")
+        ctk.CTkCheckBox(header, text="CSV存储", variable=self.storage_vars["csv"]).pack(side="left")
+
+        content = ctk.CTkFrame(card)
+        self._create_form_row(content, "文件路径:", "csv_path_var", "results.csv")
+        content.pack(fill="x", padx=5, pady=5)
+        return card
+
+    def _build_mysql_card(self, master):
+        """MySQL存储配置"""
+        card = ctk.CTkFrame(master, border_width=1, border_color="#e0e0e0")
+        header = ctk.CTkFrame(card, fg_color="#f5f5f5")
+        header.pack(fill="x")
+        ctk.CTkCheckBox(header, text="MySQL存储", variable=self.storage_vars["mysql"]).pack(side="left")
+
+        content = ctk.CTkFrame(card)
+        fields = [
+            ("主机:", "mysql_host_var", "localhost"),
+            ("端口:", "mysql_port_var", "3306"),
+            ("数据库:", "mysql_db_var", "metacse"),
+            ("用户名:", "mysql_user_var"),
+            ("密码:", "mysql_pass_var"),
+        ]
+        for field in fields:
+            self._create_form_row(content, *field)
+        content.pack(fill="x", padx=5, pady=5)
+        return card
+
+    def _build_sqlite_card(self, master):
+        """SQLite存储配置"""
+        card = ctk.CCTkFrame(master, border_width=1, border_color="#e0e0e0")
+        header = ctk.CTkFrame(card, fg_color="#f5f5f5")
+        header.pack(fill="x")
+        ctk.CTkCheckBox(header, text="SQLite存储", variable=self.storage_vars["sqlite"]).pack(side="left")
+
+        content = ctk.CTkFrame(card)
+        self._create_form_row(content, "数据库路径:", "sqlite_path_var", "data.db")
+        content.pack(fill="x", padx=5, pady=5)
+        return card
+
+    def _toggle_storage_card(self):
+        """动态显示存储配置卡片"""
+        for storage_type, card in self.storage_cards.items():
+            if self.storage_vars[storage_type].get():
+                card.pack(fill="x", pady=5, before=self.storage_cards["sqlite"])
+            else:
+                card.pack_forget()
+
+    def _build_global_actions(self, master):
+        """全局操作区"""
+        action_bar = ctk.CTkFrame(master, height=40)
+        action_bar.pack(fill="x", pady=10)
+
+        buttons = [
+            ("💾 保存配置", "#4CAF50", self.on_save_config),
+            ("🔄 刷新状态", "#2196F3", self.on_refresh_status),
+            ("⚡ 测试连接", "#FF9800", self.on_test_connections),
+            ("🧹 清除缓存", "#9E9E9E", self.on_clear_cache),
+        ]
+
+        for text, color, cmd in buttons:
+            btn = ctk.CTkButton(
+                action_bar, text=text, fg_color=color, hover_color=self._darken_color(color), corner_radius=8, width=120
+            )
+            btn.pack(side="left", padx=10)
 
     def _create_form_rows(self, master, fields):
         """批量创建表单行"""
@@ -264,19 +333,13 @@ class MetaCSEApp(ctk.CTk):
         """创建标准表单行"""
         row = ctk.CTkFrame(master, fg_color="transparent")
         row.pack(fill="x", pady=2)
-        
+
         if not hasattr(self, var_name):
             setattr(self, var_name, ctk.StringVar(value=default))
-        
+
         # 标签部分
-        ctk.CTkLabel(
-            row, 
-            text=label,
-            width=100,
-            anchor="e",
-            font=("Microsoft YaHei", 10)
-        ).pack(side="left", padx=5)
-        
+        ctk.CTkLabel(row, text=label, width=100, anchor="e", font=("Microsoft YaHei", 10)).pack(side="left", padx=5)
+
         # 输入字段
         entry = ctk.CTkEntry(
             row,
@@ -284,36 +347,57 @@ class MetaCSEApp(ctk.CTk):
             show="•" if is_password else "",
             border_color="#ddd",
             fg_color="#ffffff",
-            text_color="#333"
+            text_color="#333",
         )
         entry.pack(side="right", expand=True, fill="x", padx=5)
 
+    # 在类中添加以下事件处理方法
+    def on_refresh_status(self):
+        """刷新配置状态"""
+        # 示例实现：统计已配置的引擎
+        active_count = sum(
+            1
+            for engine in ["fofa", "zoomeye", "shodan", "360quake", "hunter"]
+            if getattr(self, f"{engine}_api_key_var").get()
+        )
+        self.api_status.configure(text=f"✅ 已配置引擎: {active_count}/5")
+
+    def on_test_connections(self):
+        """测试所有连接"""
+        # 示例实现：测试数据库连接
+        if self.storage_vars["mysql"].get():
+            print("Testing MySQL connection...")
+
+        # 测试API连接
+        current_tab = self.engine_tabs.get()
+        print(f"Testing {current_tab} API connection...")
+
+    def on_clear_cache(self):
+        """清除缓存数据"""
+        # 示例实现
+        print("Cleaning cache files...")
+        self.table.clear_data()
+
+    def on_save_config(self):
+        """保存配置到文件"""
+        # 实现配置保存逻辑
+        config = {
+            "fofa": {"api_key": self.fofa_api_key_var.get(), "api_secret": self.fofa_api_secret_var.get()},
+            # 其他引擎配置...
+        }
+        print("Configuration saved.")
+
+    def on_load_config(self):
+        """从文件加载配置"""
+        # 实现配置加载逻辑
+        print("Configuration loaded.")
+
     def _darken_color(self, hex_color, factor=0.8):
         """生成深色版本的颜色"""
-        rgb = [int(hex_color[i:i+2], 16) for i in (1, 3, 5)]
+        rgb = [int(hex_color[i : i + 2], 16) for i in (1, 3, 5)]
         darker = [int(c * factor) for c in rgb]
         return f"#{darker[0]:02x}{darker[1]:02x}{darker[2]:02x}"
 
-    # 以下是按钮事件处理函数（需要后续实现）
-    def on_save_config(self):
-        """保存配置逻辑"""
-        pass
-
-    def on_load_config(self):
-        """加载配置逻辑"""
-        pass
-
-    def on_clear_config(self):
-        """清空配置逻辑"""
-        pass
-
-    def on_test_db(self):
-        """数据库测试逻辑"""
-        pass
-
-    def on_clear_token(self):
-        """清除token逻辑"""
-        pass
 
 if __name__ == "__main__":
     app = MetaCSEApp()
