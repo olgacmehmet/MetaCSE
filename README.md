@@ -71,11 +71,11 @@ python MetaCSE.py
 
 ## 🖥 界面预览
 
-| 搜索中心 | 配置管理 |
+| 搜 索 中 心 | 配 置 管 理 |
 |----------|----------|
 | <img src="doc/img/search.png" width="400"> | <img src="doc/img/config.png" width="400"> |
 
-| 数据导出 | 用户面板 |
+| 数 据 导 出 | 用 户 面 板 |
 |----------|----------|
 | <img src="doc/img/export.png" width="400"> | <img src="doc/img/info.png" width="400"> |
 
