@@ -28,10 +28,17 @@ class MetaCSEApp(ctk.CTk):
         self.main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
         # 初始化界面组件
+        # 提前初始化存储变量字典
+        self.storage_vars = {
+            "csv": ctk.BooleanVar(value=True),
+            "mysql": ctk.BooleanVar(value=False),
+            "sqlite": ctk.BooleanVar(value=False),
+        }
+
         self.create_tab_view()
         self.create_footer()
         self.build_config_tab()
-
+        
         self.search_handler = SearchHandler()
 
     def create_tab_view(self):
@@ -121,39 +128,38 @@ class MetaCSEApp(ctk.CTk):
         ctk.CTkLabel(footer, text=text, text_color="#666").pack(pady=3)
 
     def build_config_tab(self):
-        """重构后的配置页核心逻辑"""
+        """重构后的配置页核心布局"""
         tab = self.tab_view.tab("配置")
         tab.grid_columnconfigure(0, weight=1)
         tab.grid_rowconfigure(0, weight=1)
 
-        # 主容器分左右两大区块
+        # 主容器（减少上下边距）
         main_panel = ctk.CTkFrame(tab, fg_color="transparent")
-        main_panel.pack(fill="both", expand=True, padx=15, pady=15)
+        main_panel.pack(fill="both", expand=True, padx=10, pady=5)
 
-        # 左侧引擎配置（占60%宽度）
-        left_panel = ctk.CTkFrame(main_panel, width=int(self.winfo_width() * 0.6), fg_color="transparent")
-        left_panel.pack(side="left", fill="y", expand=True)
+        # 左右面板高度同步
+        left_panel = ctk.CTkFrame(main_panel, fg_color="transparent")
+        left_panel.pack(side="left", fill="both", expand=True, padx=5)
 
-        # 右侧存储配置（占40%宽度）
         right_panel = ctk.CTkFrame(main_panel, fg_color="transparent")
-        right_panel.pack(side="right", fill="both", expand=True)
+        right_panel.pack(side="right", fill="both", expand=True, padx=5)
 
-        # 构建组件
+        # 构建组件（增加布局密度）
         self._build_engine_config(left_panel)
         self._build_storage_config(right_panel)
         self._build_global_actions(tab)
 
     def _create_section_frame(self, master, title):
-        """创建带标题的分区框架"""
-        frame = ctk.CTkFrame(master, corner_radius=8)
-        frame.pack(fill="x", pady=8, padx=2)
+        """紧凑型分区框架"""
+        frame = ctk.CTkFrame(master, corner_radius=6)
+        frame.pack(fill="both", expand=True, pady=3, padx=2)
 
-        # 标题装饰条
-        header = ctk.CTkFrame(frame, height=28, fg_color="#f8f9fa")
-        header.pack(fill="x", pady=(0, 5))
-        ctk.CTkLabel(header, text=title, text_color="#2c3e50", font=("Microsoft YaHei", 11, "bold")).pack(
-            side="left", padx=10
-        )
+        # 紧凑型标题栏
+        header = ctk.CTkFrame(frame, height=28, fg_color="#2c3e50")
+        header.pack(fill="x", pady=(0, 3))
+        ctk.CTkLabel(
+            header, text=title, text_color="#ffffff", font=("Microsoft YaHei", 12, "bold")  # 增大标题字号
+        ).pack(side="left", padx=8)
 
         return frame
 
@@ -190,52 +196,78 @@ class MetaCSEApp(ctk.CTk):
         self.api_status.pack(side="left", padx=10)
 
     def _build_engine_tab(self, master, engine_name, fields):
-        """重构后的单个引擎配置页"""
-        # 创建滚动容器
+        """紧凑引擎配置页"""
         scroll_frame = ctk.CTkScrollableFrame(master)
         scroll_frame.pack(fill="both", expand=True)
 
         for field in fields:
-            # 生成规范变量名
             var_name = f"{engine_name.lower()}_{field.lower().replace(' ', '_')}_var"
-
-            # 动态创建变量
             if not hasattr(self, var_name):
                 setattr(self, var_name, ctk.StringVar())
 
-            # 创建配置行
+            # 紧凑行布局
             row = ctk.CTkFrame(scroll_frame, fg_color="transparent")
-            row.pack(fill="x", pady=3)
+            row.pack(fill="x", pady=2)
 
-            # 标签部分
-            ctk.CTkLabel(row, text=f"{field}:", width=120, anchor="e", font=("Microsoft YaHei", 10)).pack(
+            ctk.CTkLabel(
+                row, text=f"{field}:", width=100, anchor="e", font=("Microsoft YaHei", 11)
+            ).pack(  # 增大标签字号
                 side="left", padx=5
             )
 
-            # 输入框
-            entry = ctk.CTkEntry(
+            ctk.CTkEntry(
                 row,
                 textvariable=getattr(self, var_name),
                 placeholder_text=f"输入{engine_name}的{field}...",
-                border_color="#ddd",
-                fg_color="#ffffff",
-                text_color="#333",
-            )
-            entry.pack(side="right", expand=True, fill="x", padx=5)
+                font=("Microsoft YaHei", 11),  # 统一输入框字号
+                height=28,  # 减小输入框高度
+                border_width=1,
+                corner_radius=4,
+            ).pack(side="right", expand=True, fill="x")
 
     def _build_storage_config(self, master):
-        """增强版存储配置"""
+        """紧凑存储配置"""
         frame = self._create_section_frame(master, "💾 存储配置")
 
-        # 使用Tabview实现多存储配置
-        storage_tabs = ctk.CTkTabview(frame)
-        storage_tabs.pack(fill="both", expand=True)
+        # 存储卡片紧凑布局
+        self.storage_cards = {
+            "csv": self._create_storage_card(frame, "CSV", [("文件路径", "csv_path_var", "results.csv")]),
+            "mysql": self._create_storage_card(
+                frame,
+                "MySQL",
+                [
+                    ("主机", "mysql_host_var", "localhost"),
+                    ("端口", "mysql_port_var", "3306"),
+                    ("数据库", "mysql_db_var", "metacse"),
+                    ("用户名", "mysql_user_var"),
+                    ("密码", "mysql_pass_var", True),
+                ],
+            ),
+            "sqlite": self._create_storage_card(frame, "SQLite", [("数据库路径", "sqlite_path_var", "data.db")]),
+        }
 
-        # 创建存储类型选项卡
-        for storage_type in ["CSV", "MySQL", "SQLite"]:
-            storage_tabs.add(storage_type)
-            tab_frame = storage_tabs.tab(storage_type)
-            self._build_storage_tab(tab_frame, storage_type.lower())
+    def _create_storage_card(self, master, title, fields):
+        """紧凑型存储卡片"""
+        card = ctk.CTkFrame(master, border_width=1, border_color="#bdc3c7")
+        card.pack(fill="x", pady=3)
+
+        # 紧凑标题行
+        header = ctk.CTkFrame(card, fg_color="transparent")
+        header.pack(fill="x", pady=2)
+        ctk.CTkCheckBox(
+            header,
+            text=title,
+            font=("Microsoft YaHei", 11),  # 增大复选框字号
+            variable=self.storage_vars[title.lower()],
+        ).pack(side="left", padx=5)
+
+        # 动态内容区域
+        content = ctk.CTkFrame(card, fg_color="transparent")
+        for field in fields:
+            self._create_form_row(content, *field)
+        content.pack(fill="x", padx=5, pady=3)
+
+        return card
 
     def _build_storage_tab(self, master, storage_type):
         """构建存储配置页"""
@@ -324,10 +356,27 @@ class MetaCSEApp(ctk.CTk):
             )
             btn.pack(side="left", padx=10)
 
-    def _create_form_rows(self, master, fields):
-        """批量创建表单行"""
-        for field in fields:
-            self._create_form_row(master, *field)
+    def _create_form_row(self, master, label, var_name, default="", is_password=False):
+        """紧凑表单行"""
+        row = ctk.CTkFrame(master, fg_color="transparent")
+        row.pack(fill="x", pady=1)  # 减少行间距
+
+        if not hasattr(self, var_name):
+            setattr(self, var_name, ctk.StringVar(value=default))
+
+        ctk.CTkLabel(
+            row, text=label, width=80, anchor="e", font=("Microsoft YaHei", 11)  # 减小标签宽度  # 统一字体
+        ).pack(side="left", padx=3)
+
+        ctk.CTkEntry(
+            row,
+            textvariable=getattr(self, var_name),
+            show="•" if is_password else "",
+            font=("Microsoft YaHei", 11),
+            height=28,  # 减小输入框高度
+            border_width=1,
+            corner_radius=4,
+        ).pack(side="right", expand=True, fill="x", padx=3)
 
     def _create_form_row(self, master, label, var_name, default="", is_password=False):
         """创建标准表单行"""
